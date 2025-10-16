@@ -32,7 +32,7 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_name = "Apple Store Stock Available"
+        self._attr_name = "iPhone Monitor Status"
         self._attr_unique_id = f"{config_entry.entry_id}_stock_available"
         self._attr_icon = "mdi:apple"
 
@@ -53,6 +53,21 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
         configured_stores = self.config_entry.data.get("stores", [])
         configured_products = self.config_entry.data.get("products", [])
 
+        # Create friendly display strings
+        store_list = ", ".join(configured_stores[:2]) + (
+            f" (+{len(configured_stores)-2} more)" if len(configured_stores) > 2 else ""
+        )
+        product_list = ", ".join(
+            [
+                p.replace("iPhone 17 Pro ", "").replace("iPhone 15 Pro ", "")
+                for p in configured_products[:2]
+            ]
+        ) + (
+            f" (+{len(configured_products)-2} more)"
+            if len(configured_products) > 2
+            else ""
+        )
+
         return {
             "last_check": self.coordinator.data.get("timestamp"),
             "stores_checked": self.coordinator.data.get("stores_checked", 0),
@@ -61,6 +76,9 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
             "monitoring_stores": configured_stores,
             "monitoring_products": configured_products,
             "check_interval_minutes": self.config_entry.data.get("check_interval", 10),
+            "stores_display": store_list,
+            "products_display": product_list,
+            "status_summary": f"Checking {product_list} at {store_list}",
         }
 
     @property

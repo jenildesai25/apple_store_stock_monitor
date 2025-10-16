@@ -31,10 +31,10 @@ class AppleStoreAvailabilityBinarySensor(CoordinatorEntity, BinarySensorEntity):
         """Initialize the binary sensor."""
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_name = "Apple Store Stock Available"
+        self._attr_name = "iPhone Stock Found"
         self._attr_unique_id = f"{config_entry.entry_id}_stock_binary"
-        self._attr_icon = "mdi:apple"
-        self._attr_device_class = "connectivity"
+        self._attr_icon = "mdi:cellphone-check"
+        # Remove device_class to show On/Off instead of Connected/Disconnected
 
     @property
     def is_on(self):
@@ -50,10 +50,15 @@ class AppleStoreAvailabilityBinarySensor(CoordinatorEntity, BinarySensorEntity):
             return {}
 
         available_items = self.coordinator.data.get("available_items", [])
+        configured_stores = self.config_entry.data.get("stores", [])
+        configured_products = self.config_entry.data.get("products", [])
 
         return {
             "available_count": len(available_items),
             "available_products": [item["product"] for item in available_items],
             "available_stores": [item["store"] for item in available_items],
             "last_check": self.coordinator.data.get("timestamp"),
+            "monitoring_stores": configured_stores,
+            "monitoring_products": configured_products,
+            "status_message": f"Monitoring {len(configured_products)} iPhone models at {len(configured_stores)} stores",
         }
