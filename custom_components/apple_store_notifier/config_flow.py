@@ -85,21 +85,48 @@ class AppleStoreNotifierOptionsFlow(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
         """Manage the options."""
         if user_input is not None:
+            # Update the config entry data with new options
+            new_data = {**self.config_entry.data, **user_input}
+            self.hass.config_entries.async_update_entry(
+                self.config_entry, data=new_data
+            )
             return self.async_create_entry(title="", data=user_input)
+
+        # Get current values from config entry
+        current_stores = self.config_entry.data.get(CONF_STORES, [])
+        current_products = self.config_entry.data.get(CONF_PRODUCTS, [])
+        current_interval = self.config_entry.data.get(
+            CONF_CHECK_INTERVAL, DEFAULT_CHECK_INTERVAL
+        )
+        current_sms_url = self.config_entry.data.get(
+            CONF_SMS_GATEWAY_URL, DEFAULT_SMS_GATEWAY_URL
+        )
+
+        # Convert dict_keys to lists
+        store_options = list(APPLE_STORES.keys())
+        product_options = list(IPHONE_MODELS.keys())
 
         data_schema = vol.Schema(
             {
                 vol.Required(
                     CONF_CHECK_INTERVAL,
-                    default=self.config_entry.options.get(
-                        CONF_CHECK_INTERVAL, DEFAULT_CHECK_INTERVAL
-                    ),
+                    default=current_interval,
                 ): vol.All(vol.Coerce(int), vol.Range(min=5, max=60)),
                 vol.Required(
                     CONF_SMS_GATEWAY_URL,
-                    default=self.config_entry.options.get(
-                        CONF_SMS_GATEWAY_URL, DEFAULT_SMS_GATEWAY_URL
-                    ),
+                    default=current_sms_url,
+                ): str,
+                vol.Required(
+                    CONF_STORES,
+                    default=current_stores,
+                ): cv.multi_select(store_options),
+                vol.Required(
+                    CONF_PRODUCTS,
+                    default=current_products,
+                ): cv.multi_select(product_options),
+                vol.Optional(
+                    CONF_PHONE_NUMBERS,
+                    default=self.config_entry.data.get(CONF_PHONE_NUMBERS, ""),
                 ): str,
             }
         )
