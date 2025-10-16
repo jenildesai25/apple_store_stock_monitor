@@ -1,0 +1,33 @@
+# Add to your automations.yaml
+
+- id: apple_store_stock_check
+  alias: "Apple Store Stock Check"
+  description: "Periodically check Apple Store stock"
+  trigger:
+    - platform: time_pattern
+      minutes: "/5"  # Every 5 minutes
+  condition:
+    - condition: state
+      entity_id: input_boolean.apple_monitor_enabled
+      state: "on"
+  action:
+    - service: shell_command.check_apple_stock
+    - delay: "00:00:10"
+    - service: homeassistant.update_entity
+      entity_id: sensor.apple_store_stock_status
+
+- id: apple_stock_notification
+  alias: "Apple Stock Available Notification"
+  description: "Send notification when Apple product is in stock"
+  trigger:
+    - platform: state
+      entity_id: sensor.apple_store_stock_status
+      to: "in_stock"
+  action:
+    - service: notify.mobile_app_your_phone
+      data:
+        title: "🍎 Apple Stock Alert"
+        message: "{{ state_attr('sensor.apple_store_stock_status', 'last_product') }} is available!"
+        data:
+          priority: high
+          ttl: 0

@@ -1,0 +1,12 @@
+apple_store_monitor:
+  module: apple_store_monitor
+  class: AppleStoreMonitor
+  sms_gateway_url: "http://192.168.1.100:5000"
+  check_interval: 300  # 5 minutes
+  stores:
+    - "Fifth Avenue"
+    - "SoHo"
+    - "Upper West Side"
+  products:
+    - "iPhone 15 Pro"
+    - "MacBook Pro 14-inch"

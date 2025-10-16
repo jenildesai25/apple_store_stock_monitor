@@ -1,0 +1,25 @@
+name: "Apple Store Stock Notifier"
+description: "Monitor Apple Store stock and send SMS notifications"
+version: "1.0.0"
+slug: "apple_store_notifier"
+init: false
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+startup: services
+boot: auto
+options:
+  sms_gateway_url: "http://192.168.1.100:5000"
+  check_interval: 300
+  stores: []
+  products: []
+schema:
+  sms_gateway_url: str
+  check_interval: int(60,3600)
+  stores: [str]
+  products: [str]
+ports:
+  8080/tcp: 8080

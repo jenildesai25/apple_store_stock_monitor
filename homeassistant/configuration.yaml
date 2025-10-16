@@ -1,0 +1,29 @@
+# Add to your existing configuration.yaml
+
+shell_command:
+  check_apple_stock: "cd /config/apple_store_notifier && python3 run_monitor.py check"
+
+# Create input helpers for configuration
+input_text:
+  apple_sms_gateway:
+    name: "Apple Store SMS Gateway URL"
+    initial: "http://192.168.1.100:5000"
+    
+input_number:
+  apple_check_interval:
+    name: "Check Interval (minutes)"
+    min: 1
+    max: 60
+    initial: 5
+    unit_of_measurement: "min"
+
+# Sensors to track status
+sensor:
+  - platform: command_line
+    name: "Apple Store Stock Status"
+    command: "cd /config/apple_store_notifier && python3 -c 'import json; from run_monitor import get_status; print(json.dumps(get_status()))'"
+    value_template: "{{ value_json.status }}"
+    json_attributes:
+      - last_check
+      - products_monitored
+      - stores_monitored
