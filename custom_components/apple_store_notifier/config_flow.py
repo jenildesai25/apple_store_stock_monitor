@@ -29,15 +29,6 @@ class AppleStoreNotifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            # Add default stores and products if not provided
-            if CONF_STORES not in user_input:
-                user_input[CONF_STORES] = ["Fifth Avenue", "SoHo"]
-            if CONF_PRODUCTS not in user_input:
-                user_input[CONF_PRODUCTS] = [
-                    "iPhone 15 Pro 128GB Natural Titanium",
-                    "iPhone 15 Pro 256GB Natural Titanium",
-                ]
-
             return self.async_create_entry(
                 title="Apple Store Notifier", data=user_input
             )
