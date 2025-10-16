@@ -12,11 +12,15 @@ from .const import (
     CONF_SMS_GATEWAY_URL,
     CONF_CHECK_INTERVAL,
     CONF_PHONE_NUMBERS,
+    CONF_ZIPCODE,
+    CONF_PRIMARY_STORE,
     DEFAULT_CHECK_INTERVAL,
     DEFAULT_SMS_GATEWAY_URL,
     APPLE_STORES,
+    APPLE_STORES_DATA,
     IPHONE_MODELS,
 )
+from .zipcode_utils import find_nearby_stores
 
 
 class AppleStoreNotifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
