@@ -52,6 +52,8 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Fetch data from Apple Store."""
+        _LOGGER.info("Starting Apple Store stock check...")
+
         from .apple_monitor import AppleStoreMonitor
 
         monitor = AppleStoreMonitor(
@@ -60,4 +62,9 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
             sms_gateway_url=self.entry.data.get("sms_gateway_url"),
         )
 
-        return await self.hass.async_add_executor_job(monitor.check_stock)
+        result = await self.hass.async_add_executor_job(monitor.check_stock)
+        _LOGGER.info(
+            f"Stock check completed. Found {result.get('total_available', 0)} items available"
+        )
+
+        return result
