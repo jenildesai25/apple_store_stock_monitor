@@ -29,9 +29,22 @@ class AppleStoreNotifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
+            # Add default stores and products if not provided
+            if CONF_STORES not in user_input:
+                user_input[CONF_STORES] = ["Fifth Avenue", "SoHo"]
+            if CONF_PRODUCTS not in user_input:
+                user_input[CONF_PRODUCTS] = [
+                    "iPhone 15 Pro 128GB Natural Titanium",
+                    "iPhone 15 Pro 256GB Natural Titanium",
+                ]
+
             return self.async_create_entry(
                 title="Apple Store Notifier", data=user_input
             )
+
+        # Convert dict_keys to lists to avoid JSON serialization issues
+        store_options = list(APPLE_STORES.keys())
+        product_options = list(IPHONE_MODELS.keys())
 
         data_schema = vol.Schema(
             {
@@ -41,12 +54,12 @@ class AppleStoreNotifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required(
                     CONF_CHECK_INTERVAL, default=DEFAULT_CHECK_INTERVAL
                 ): vol.All(vol.Coerce(int), vol.Range(min=5, max=60)),
+                vol.Required(CONF_STORES, default=store_options[:3]): cv.multi_select(
+                    store_options
+                ),
                 vol.Required(
-                    CONF_STORES, default=list(APPLE_STORES.keys())[:3]
-                ): cv.multi_select(APPLE_STORES.keys()),
-                vol.Required(
-                    CONF_PRODUCTS, default=list(IPHONE_MODELS.keys())[:3]
-                ): cv.multi_select(IPHONE_MODELS.keys()),
+                    CONF_PRODUCTS, default=product_options[:3]
+                ): cv.multi_select(product_options),
                 vol.Optional(CONF_PHONE_NUMBERS, default=""): str,
             }
         )
