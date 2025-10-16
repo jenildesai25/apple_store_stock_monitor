@@ -78,7 +78,16 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
             "check_interval_minutes": self.config_entry.data.get("check_interval", 10),
             "stores_display": store_list,
             "products_display": product_list,
-            "status_summary": f"Checking {product_list} at {store_list}",
+            "primary_store": self.config_entry.data.get(
+                "primary_store", configured_stores[0] if configured_stores else ""
+            ),
+            "zipcode": self.config_entry.data.get("zipcode", ""),
+            "status_summary": f"Monitoring {product_list} at {self.config_entry.data.get('primary_store', configured_stores[0] if configured_stores else '')}"
+            + (
+                f" (+{len(configured_stores)-1} backup)"
+                if len(configured_stores) > 1
+                else ""
+            ),
         }
 
     @property
