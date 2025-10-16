@@ -9,8 +9,7 @@ CONF_PRODUCTS = "products"
 CONF_SMS_GATEWAY_URL = "sms_gateway_url"
 CONF_CHECK_INTERVAL = "check_interval"
 CONF_PHONE_NUMBERS = "phone_numbers"
-CONF_ZIPCODE = "zipcode"
-CONF_PRIMARY_STORE = "primary_store"
+
 
 # Default values
 DEFAULT_CHECK_INTERVAL = 10  # 10 minutes for less frequent checks

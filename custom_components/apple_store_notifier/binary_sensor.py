@@ -31,7 +31,7 @@ class AppleStoreAvailabilityBinarySensor(CoordinatorEntity, BinarySensorEntity):
         """Initialize the binary sensor."""
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self._attr_name = "iPhone Stock Found"
+        self._attr_name = "Apple Store Stock Available"
         self._attr_unique_id = f"{config_entry.entry_id}_stock_binary"
         self._attr_icon = "mdi:cellphone-check"
         # Remove device_class to show On/Off instead of Connected/Disconnected
