@@ -47,7 +47,7 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=entry.data.get("check_interval", 5)),
+            update_interval=timedelta(minutes=entry.data.get("check_interval", 10)),
         )
 
     async def _async_update_data(self):

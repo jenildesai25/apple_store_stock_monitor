@@ -7,14 +7,11 @@
     "config_flow": true,
     "dependencies": [],
     "documentation": "https://github.com/jenildesai25/apple_store_stock_monitor",
-    "homekit": {},
     "iot_class": "cloud_polling",
-    "issue_tracker": "https://github.com/jenil/apple-store-stock-notifier/issues",
+    "issue_tracker": "https://github.com/jenildesai25/apple_store_stock_monitor/issues",
     "requirements": [
         "requests>=2.25.0",
         "beautifulsoup4>=4.9.0"
     ],
-    "ssdp": {},
     "version": "1.0.0",
-    "zeroconf": {}
 }
