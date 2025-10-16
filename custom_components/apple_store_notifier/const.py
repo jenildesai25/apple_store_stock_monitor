@@ -25,6 +25,13 @@ APPLE_STORES = {
     "Alderwood Mall, Lynnwood": "R234",
     "Bellevue Square": "R008",
     "University Village, Seattle": "R280",
+    # Keep old options for existing configs
+    "Fifth Avenue": "R409",
+    "SoHo": "R014",
+    "Upper West Side": "R018",
+    "Brooklyn": "R447",
+    "Staten Island": "R117",
+    "Queens Center": "R015",
 }
 
 IPHONE_MODELS = {
@@ -64,4 +71,12 @@ IPHONE_MODELS = {
     "iPhone 17 Pro Max 256GB Black Titanium": "MG8Q4LL/A",
     "iPhone 17 Pro Max 512GB Black Titanium": "MG8R4LL/A",
     "iPhone 17 Pro Max 1TB Black Titanium": "MG8S4LL/A",
+    # Keep old iPhone 15 Pro options for existing configs
+    "iPhone 15 Pro 128GB Natural Titanium": "MU2F3LL/A",
+    "iPhone 15 Pro 256GB Natural Titanium": "MU2G3LL/A",
+    "iPhone 15 Pro 512GB Natural Titanium": "MU2H3LL/A",
+    "iPhone 15 Pro 1TB Natural Titanium": "MU2J3LL/A",
+    "iPhone 15 Pro Max 256GB Natural Titanium": "MU2T3LL/A",
+    "iPhone 15 Pro Max 512GB Natural Titanium": "MU2U3LL/A",
+    "iPhone 15 Pro Max 1TB Natural Titanium": "MU2V3LL/A",
 }
