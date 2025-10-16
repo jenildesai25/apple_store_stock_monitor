@@ -16,6 +16,7 @@ DEFAULT_SMS_GATEWAY_URL = "http://192.168.1.100:5000"
 
 # Apple Store URLs and data
 APPLE_STORES = {
+    "Washington Square, Tigard": "R090",
     "Fifth Avenue": "R409",
     "SoHo": "R014",
     "Upper West Side": "R018",
@@ -25,6 +26,7 @@ APPLE_STORES = {
 }
 
 IPHONE_MODELS = {
+    "iPhone 17 Pro 512GB Deep Blue": "MG7Q4LL/A",
     "iPhone 15 Pro 128GB Natural Titanium": "MU2F3LL/A",
     "iPhone 15 Pro 256GB Natural Titanium": "MU2G3LL/A",
     "iPhone 15 Pro 512GB Natural Titanium": "MU2H3LL/A",
