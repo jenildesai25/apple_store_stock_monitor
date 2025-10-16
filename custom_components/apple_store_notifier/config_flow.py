@@ -43,10 +43,10 @@ class AppleStoreNotifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 ): vol.All(vol.Coerce(int), vol.Range(min=5, max=60)),
                 vol.Required(
                     CONF_STORES, default=list(APPLE_STORES.keys())[:3]
-                ): vol.All(cv.multi_select, vol.In(APPLE_STORES.keys())),
+                ): cv.multi_select(APPLE_STORES.keys()),
                 vol.Required(
                     CONF_PRODUCTS, default=list(IPHONE_MODELS.keys())[:3]
-                ): vol.All(cv.multi_select, vol.In(IPHONE_MODELS.keys())),
+                ): cv.multi_select(IPHONE_MODELS.keys()),
                 vol.Optional(CONF_PHONE_NUMBERS, default=""): str,
             }
         )
