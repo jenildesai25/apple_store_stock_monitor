@@ -49,11 +49,18 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return {}
 
+        # Get configured stores and products from config entry
+        configured_stores = self.config_entry.data.get("stores", [])
+        configured_products = self.config_entry.data.get("products", [])
+
         return {
             "last_check": self.coordinator.data.get("timestamp"),
             "stores_checked": self.coordinator.data.get("stores_checked", 0),
             "products_checked": self.coordinator.data.get("products_checked", 0),
             "available_items": self.coordinator.data.get("available_items", []),
+            "monitoring_stores": configured_stores,
+            "monitoring_products": configured_products,
+            "check_interval_minutes": self.config_entry.data.get("check_interval", 10),
         }
 
     @property
