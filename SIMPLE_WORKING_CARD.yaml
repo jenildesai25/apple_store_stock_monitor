@@ -1,0 +1,41 @@
+# Simple Working Card - Copy this YAML to your dashboard
+
+# First, try this basic card to see what entities exist:
+type: entities
+title: 🔍 Debug - Available Entities
+entities:
+  - entity: sensor.iphone_monitor_status
+    name: "iPhone Monitor Status"
+  - entity: sensor.apple_store_stock_available  
+    name: "Stock Available (Old Name)"
+  - entity: binary_sensor.iphone_stock_found
+    name: "Stock Found"
+  - entity: binary_sensor.apple_store_stock_available
+    name: "Stock Available Binary (Old Name)"
+  - entity: sensor.apple_store_last_check
+    name: "Last Check"
+show_header_toggle: false
+
+---
+
+# If the above doesn't work, try this minimal version:
+type: auto-entities
+card:
+  type: entities
+  title: 📱 All Apple Store Entities
+filter:
+  include:
+    - entity_id: "*apple_store*"
+    - entity_id: "*iphone*"
+  exclude: []
+
+---
+
+# Manual entity card (replace with actual entity names):
+type: entities
+title: 📱 iPhone Stock Monitor
+entities:
+  # Replace these with the actual entity names you see in Developer Tools
+  - sensor.YOUR_ACTUAL_ENTITY_NAME_HERE
+  - binary_sensor.YOUR_ACTUAL_ENTITY_NAME_HERE
+show_header_toggle: false

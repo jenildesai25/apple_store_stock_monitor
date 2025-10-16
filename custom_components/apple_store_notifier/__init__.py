@@ -23,13 +23,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    # Register service for manual stock check
-    async def handle_check_stock(call):
-        """Handle manual stock check service call."""
-        _LOGGER.info("Manual stock check triggered")
-        await coordinator.async_request_refresh()
-
-    hass.services.async_register(DOMAIN, "check_stock", handle_check_stock)
+    # Service registration removed to fix services.yaml error
 
     return True
 
