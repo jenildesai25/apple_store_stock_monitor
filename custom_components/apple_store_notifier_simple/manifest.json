@@ -1,0 +1,13 @@
+{
+    "domain": "apple_store_notifier_simple",
+    "name": "Apple Store Notifier Simple",
+    "codeowners": [
+        "@jenildesai25"
+    ],
+    "config_flow": true,
+    "dependencies": [],
+    "documentation": "https://github.com/jenildesai25/apple_store_stock_monitor",
+    "iot_class": "local_polling",
+    "requirements": [],
+    "version": "1.0.0"
+}

@@ -1,0 +1,25 @@
+# Add this to your Home Assistant dashboard
+type: entities
+title: Apple Store Stock Monitor
+entities:
+  - entity: sensor.apple_store_stock_available
+    name: Items Available
+    icon: mdi:apple
+  - entity: binary_sensor.apple_store_stock_available
+    name: Stock Status
+    icon: mdi:check-circle
+  - entity: sensor.apple_store_last_check
+    name: Last Check
+    icon: mdi:clock-outline
+show_header_toggle: false
+
+# Or use a more detailed card
+---
+type: custom:auto-entities
+card:
+  type: entities
+  title: Apple Store Stock Details
+filter:
+  include:
+    - entity_id: "sensor.apple_store*"
+    - entity_id: "binary_sensor.apple_store*"
