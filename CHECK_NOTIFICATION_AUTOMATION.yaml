@@ -1,0 +1,87 @@
+# Add this to your Home Assistant automations.yaml
+
+- id: apple_store_check_notification
+  alias: "Apple Store Check Notification"
+  description: "Send notification every time Apple Store check runs"
+  trigger:
+    - platform: state
+      entity_id: sensor.apple_store_last_check
+  condition:
+    # Only trigger if the sensor actually has a value (not unavailable/unknown)
+    - condition: template
+      value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown', 'none'] }}"
+  action:
+    - service: notify.mobile_app_your_phone_name  # Replace with your phone name
+      data:
+        title: "🍎 Apple Store Check Complete"
+        message: >
+          {% set available = states('sensor.apple_store_stock_available') | int %}
+          {% if available > 0 %}
+          🎉 STOCK FOUND! {{ available }} items available
+          {% else %}
+          ✅ Check complete - No stock found
+          {% endif %}
+          
+          Last check: {{ states('sensor.apple_store_last_check') }}
+        data:
+          priority: normal
+          ttl: 300  # 5 minutes
+
+---
+
+# Alternative: Email-to-SMS version
+- id: apple_store_check_sms
+  alias: "Apple Store Check SMS"
+  description: "Send SMS every time Apple Store check runs"
+  trigger:
+    - platform: state
+      entity_id: sensor.apple_store_last_check
+  condition:
+    - condition: template
+      value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown', 'none'] }}"
+  action:
+    - service: notify.sms_notification  # Configure this in configuration.yaml
+      data:
+        message: >
+          {% set available = states('sensor.apple_store_stock_available') | int %}
+          Apple Store Check: {% if available > 0 %}{{ available }} items found!{% else %}No stock{% endif %} - {{ now().strftime('%H:%M') }}
+
+---
+
+# Detailed notification with store/product info
+- id: apple_store_detailed_check
+  alias: "Apple Store Detailed Check Notification"
+  trigger:
+    - platform: state
+      entity_id: sensor.apple_store_last_check
+  condition:
+    - condition: template
+      value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown', 'none'] }}"
+  action:
+    - service: notify.mobile_app_your_phone_name
+      data:
+        title: "🍎 Apple Store Monitor"
+        message: >
+          {% set available = states('sensor.apple_store_stock_available') | int %}
+          {% set stores = state_attr('sensor.apple_store_stock_available', 'monitoring_stores') %}
+          {% set products = state_attr('sensor.apple_store_stock_available', 'monitoring_products') %}
+          
+          {% if available > 0 %}
+          🎉 STOCK ALERT: {{ available }} items available!
+          
+          {% set items = state_attr('sensor.apple_store_stock_available', 'available_items') %}
+          {% for item in items %}
+          📱 {{ item.product }} at {{ item.store }}
+          {% endfor %}
+          {% else %}
+          ✅ No stock found
+          
+          Monitoring:
+          🏪 {{ stores | length }} stores
+          📱 {{ products | length }} iPhone models
+          {% endif %}
+          
+          ⏰ {{ states('sensor.apple_store_last_check') }}
+        data:
+          priority: "{{ 'high' if available > 0 else 'normal' }}"
+          ttl: 0

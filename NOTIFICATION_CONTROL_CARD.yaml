@@ -1,0 +1,44 @@
+# Add this card to your dashboard for notification control
+
+type: entities
+title: 🔔 Apple Store Notifications
+entities:
+  # Main stock info
+  - entity: sensor.apple_store_stock_available
+    name: Items Available
+  - entity: binary_sensor.apple_store_stock_available
+    name: Stock Status
+  - entity: sensor.apple_store_last_check
+    name: Last Check
+    
+  # Notification controls
+  - type: section
+    label: "🔔 Notification Settings"
+  - entity: input_boolean.apple_notify_unavailable
+    name: "Notify on Unavailable"
+    icon: mdi:bell-outline
+  - entity: counter.apple_unavailable_count
+    name: "Checks Since Last Stock"
+    icon: mdi:counter
+    
+  # Quick actions
+  - type: section
+    label: "⚡ Quick Actions"
+  - type: button
+    name: "🔕 Disable Unavailable Alerts"
+    action_name: "Turn Off"
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.apple_notify_unavailable
+  - type: button
+    name: "🔔 Enable Unavailable Alerts"
+    action_name: "Turn On"
+    tap_action:
+      action: call-service
+      service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.apple_notify_unavailable
+
+show_header_toggle: false
