@@ -79,11 +79,6 @@ class AppleStoreStockSensor(CoordinatorEntity, SensorEntity):
             "stores_display": store_list,
             "products_display": product_list,
             "status_summary": f"Checking {product_list} at {store_list}",
-            + (
-                f" (+{len(configured_stores)-1} backup)"
-                if len(configured_stores) > 1
-                else ""
-            ),
         }
 
     @property
