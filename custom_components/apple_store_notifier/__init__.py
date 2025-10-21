@@ -45,6 +45,15 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
         """Initialize."""
         self.entry = entry
 
+        # Create the monitor instance once and reuse it
+        stores = entry.data.get("stores", [])
+        products = entry.data.get("products", [])
+        sms_gateway_url = entry.data.get("sms_gateway_url")
+
+        from .apple_monitor import AppleStoreMonitor
+
+        self._monitor = AppleStoreMonitor(stores, products, sms_gateway_url)
+
         super().__init__(
             hass,
             _LOGGER,
@@ -53,7 +62,7 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
         )
 
     async def _async_update_data(self):
-        """Fetch data from Apple Store."""
+        """Fetch data from Apple Store with individual product tracking."""
         stores = self.entry.data.get("stores", [])
         products = self.entry.data.get("products", [])
 
@@ -61,22 +70,28 @@ class AppleStoreCoordinator(DataUpdateCoordinator):
             f"🍎 Starting stock check: {len(stores)} stores, {len(products)} products"
         )
 
-        from .apple_monitor import AppleStoreMonitor
-
-        monitor = AppleStoreMonitor(
-            stores=stores,
-            products=products,
-            sms_gateway_url=self.entry.data.get("sms_gateway_url"),
-        )
-
-        result = await self.hass.async_add_executor_job(monitor.check_stock)
+        result = await self.hass.async_add_executor_job(self._monitor.check_stock)
 
         available_count = result.get("total_available", 0)
+        individual_results = result.get("individual_results", {})
+
         if available_count > 0:
             _LOGGER.warning(f"🎉 STOCK FOUND! {available_count} items available!")
             for item in result.get("available_items", []):
                 _LOGGER.warning(f"📱 {item['product']} at {item['store']}")
         else:
             _LOGGER.info(f"✅ Check complete: No stock found")
+
+        # Log individual product status for debugging
+        _LOGGER.debug(
+            f"📊 Individual results: {len(individual_results)} product/store combinations checked"
+        )
+        for key, individual_result in individual_results.items():
+            status = (
+                "✅ Available" if individual_result["available"] else "❌ Out of stock"
+            )
+            _LOGGER.debug(
+                f"   {individual_result['product_name']} at {individual_result['store_name']}: {status}"
+            )
 
         return result

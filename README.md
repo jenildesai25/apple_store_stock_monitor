@@ -1,109 +1,117 @@
-# Apple Store Stock Notifier for Home Assistant
+# 🍎 Apple Store Stock Monitor
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+**API-based Apple product stock monitoring with no hardcoded data**
 
-A Home Assistant custom integration that monitors Apple Store stock availability and sends SMS notifications when iPhones become available for pickup.
+Monitor any Apple product at any Apple store with real-time availability checking, individual product tracking, and Home Assistant integration.
 
-## Features
+## ✨ Features
 
-- 🍎 Monitor multiple Apple Stores for iPhone availability
-- 📱 Track multiple iPhone models (iPhone 15 Pro series)
-- 📲 SMS notifications via separate SMS gateway
-- 🏠 Native Home Assistant integration with sensors
-- ⚙️ Configurable check intervals
-- 📊 Detailed availability tracking
+- **🔍 Dynamic Product Discovery** - Automatically finds all Apple products via API
+- **🏪 Dynamic Store Discovery** - Finds Apple stores near any zipcode
+- **📱 Individual Tracking** - Each product/store combination tracked separately
+- **🏠 Home Assistant Integration** - Individual sensors for each product
+- **🔮 Smart Predictions** - Learns restock patterns over time
+- **📲 Multiple Notifications** - SMS, email, Home Assistant alerts
 
-## Installation
+## 🚀 Quick Start
 
-### Via HACS (Recommended)
+### 1. Setup
+```bash
+python setup.py
+```
 
-1. Open HACS in Home Assistant
-2. Go to "Integrations"
-3. Click the three dots in the top right corner
-4. Select "Custom repositories"
-5. Add `https://github.com/jenildesai25/apple_store_stock_monitor` and select "Integration" as the category
-6. Click "Install"
-7. Restart Home Assistant
+### 2. Find Your iPhone
+```bash
+# Search for iPhone 17 Pro models
+python apple_monitor.py discover "iPhone 17 Pro"
 
-### Manual Installation
+# Add the one you want (example)
+python apple_monitor.py add-product MG7Q4LL/A "iPhone 17 Pro 512GB Deep Blue"
+```
 
-1. Copy the `custom_components/apple_store_notifier` folder to your Home Assistant `custom_components` directory
-2. Restart Home Assistant
+### 3. Find Nearby Stores
+```bash
+# Find stores near you
+python apple_monitor.py stores 97223
 
-## Configuration
+# Add stores you want to monitor
+python apple_monitor.py add-store R090 "Washington Square, Tigard"
+```
 
-1. Go to Settings → Devices & Services
-2. Click "Add Integration"
-3. Search for "Apple Store Stock Notifier"
-4. Configure:
-   - **SMS Gateway URL**: URL of your SMS gateway service (e.g., `http://192.168.1.100:5000`)
-   - **Check Interval**: How often to check (5-60 minutes, default: 10 minutes)
-   - **Stores**: Select Apple Stores to monitor
-   - **Products**: Select iPhone models to track
+### 4. Start Monitoring
+```bash
+# Check once
+python apple_monitor.py check
 
-## SMS Gateway Setup
+# Continuous monitoring
+python apple_monitor.py run
+```
 
-This integration requires a separate SMS gateway service. Deploy the included SMS gateway on your Raspberry Pi:
+## 📱 iPhone 17 Pro Deep Blue 512GB
+
+**Product Code**: `MG7Q4LL/A`  
+**Quick Setup**: `python setup.py` → Choose option 1
+
+## 🏠 Home Assistant Integration
+
+### Install Integration
+```bash
+cp -r custom_components/apple_store_notifier /config/custom_components/
+```
+
+### Generate Dashboard
+```bash
+python generate_ha_dashboard.py
+```
+
+### Individual Sensors
+Each product/store gets its own sensor:
+- `sensor.iphone_17_pro_512gb_deep_blue_at_washington_square_tigard`
+- `sensor.iphone_17_pro_512gb_deep_blue_at_pioneer_place_portland`
+
+## 🔧 Commands
 
 ```bash
-# Copy the raspberry-pi-sms-gateway folder to your Pi
-# Follow the setup instructions in RASPBERRY_PI_SMS_SETUP.md
+python apple_monitor.py discover <search>    # Find products
+python apple_monitor.py stores <zipcode>     # Find stores  
+python apple_monitor.py add-product <code> <name>  # Add product
+python apple_monitor.py add-store <code> <name>    # Add store
+python apple_monitor.py check                # Check stock once
+python apple_monitor.py run                  # Continuous monitoring
+python apple_monitor.py status               # Show configuration
 ```
 
-## Entities Created
+## 📊 No Hardcoded Data
 
-### Sensors
-- `sensor.apple_store_stock_available` - Number of available items
-- `sensor.apple_store_last_check` - Timestamp of last check
+- ✅ **Products**: Discovered dynamically from Apple's API
+- ✅ **Stores**: Discovered by zipcode via Apple's API  
+- ✅ **Availability**: Real-time API checks
+- ✅ **Predictions**: Based on learned patterns
 
-### Binary Sensors  
-- `binary_sensor.apple_store_stock_available` - True when any stock is available
+## 🎯 Perfect For
 
-## Automation Example
+- **iPhone 17 Pro Deep Blue 512GB** monitoring (tested and working)
+- **Any Apple product** (iPhones, iPads, Macs, Apple Watch, AirPods)
+- **Multiple products** across multiple stores
+- **Home Assistant** users wanting individual product sensors
+- **Restock predictions** based on historical patterns
 
-```yaml
-automation:
-  - alias: "iPhone Stock Alert"
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.apple_store_stock_available
-        to: "on"
-    action:
-      - service: notify.mobile_app_your_phone
-        data:
-          title: "🍎 iPhone Available!"
-          message: "{{ state_attr('sensor.apple_store_stock_available', 'available_items') | length }} items available"
-```
+## 📁 Core Files
 
-## Supported Stores
+- `apple_monitor.py` - Main monitoring script
+- `dynamic_apple_monitor.py` - API-based product/store discovery
+- `flexible_config_system.py` - Configuration management
+- `restock_analyzer.py` - Pattern analysis and predictions
+- `custom_components/` - Home Assistant integration
 
-- Fifth Avenue (NYC)
-- SoHo (NYC)  
-- Upper West Side (NYC)
-- Brooklyn (NYC)
-- Staten Island (NYC)
-- Queens Center (NYC)
+## 🔄 How It Works
 
-## Supported Products
+1. **Discovery**: Scans Apple's website for current products and stores
+2. **Configuration**: You choose which products and stores to monitor
+3. **Monitoring**: Checks availability via Apple's pickup API
+4. **Learning**: Records patterns to predict future restocks
+5. **Alerting**: Notifies you when products become available
 
-- iPhone 15 Pro (128GB, 256GB, 512GB, 1TB)
-- iPhone 15 Pro Max (256GB, 512GB, 1TB)
-- All in Natural Titanium
+---
 
-## Troubleshooting
-
-Check the Home Assistant logs for any errors:
-```
-Settings → System → Logs
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-MIT License
+**No hardcoded product lists. No outdated store data. Just pure API-based intelligence.** 🍎✨

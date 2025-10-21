@@ -1,0 +1,39 @@
+{
+  "products_to_monitor": [
+    {
+      "product_code": "MG7Q4LL/A",
+      "product_name": "iPhone 17 Pro 512GB Deep Blue",
+      "category": "iphone"
+    }
+  ],
+  "stores_to_monitor": [
+    {
+      "store_code": "R090",
+      "store_name": "Washington Square, Tigard",
+      "city": "",
+      "state": ""
+    },
+    {
+      "store_code": "R191",
+      "store_name": "Pioneer Place, Portland",
+      "city": "",
+      "state": ""
+    },
+    {
+      "store_code": "R409",
+      "store_name": "Fifth Avenue, NYC",
+      "city": "",
+      "state": ""
+    },
+    {
+      "store_code": "R014",
+      "store_name": "SoHo, NYC",
+      "city": "",
+      "state": ""
+    }
+  ],
+  "check_interval_minutes": 10,
+  "notifications": {
+    "sms_gateway_url": "http://localhost:5000"
+  }
+}
